@@ -927,4 +927,84 @@ class Panel_admin extends CI_Controller {
 
         $this->load->view('backend/index', $page_data);
     }
+
+    public function categories($param1 = "", $param2 = "") {
+        if ($this->session->userdata('admin_login') != true) {
+            $this->need_login();
+        }
+
+        $this->session->set_userdata('last_page', 'posts');
+
+        if ($param1 == 'create') {
+            $page_data['page_name'] = 'posts_category_create';
+            $page_data['page_title'] = get_phrase('create_new_category');
+
+            if (isset($_POST['PostsCategory'])){
+                $errors = [];
+                $is_post_exists = $this->postCategory_model->is_category_exists($this->input->post('PostsCategory')['slug']);
+                if ($is_post_exists) {
+                    $this->session->set_flashdata('error_message', get_phrase('slug_already_exist'));
+                    array_push($errors, get_phrase('slug_already_exist'));
+                }
+
+                if (count($errors) == 0) {
+                    $id = $this->postCategory_model->create($this->input->post('PostsCategory'));
+                    if ($id > 0) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_new_category_is_successfully_added'));
+                        redirect(site_url('panel-admin/categories/update/' . $id), 'refresh');
+                    }
+                }
+            }
+
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == 'update') {
+            $page_data['page_name'] = 'posts_category_update';
+            $page_data['page_data'] = $this->postCategory_model->findByPk($param2);
+            $page_data['page_title'] = $page_data['page_data']->title;
+
+            if (isset($_POST['PostsCategory']) && is_object($page_data['page_data'])){
+                $errors = [];
+                if ($page_data['page_data']->slug != $this->input->post('PostsCategory')['slug']) {
+                    $is_post_exists = $this->postCategory_model->is_category_exists($this->input->post('PostsCategory')['slug']);
+                    if ($is_post_exists) {
+                        $this->session->set_flashdata('error_message', get_phrase('permalink_already_exist'));
+                        array_push($errors, get_phrase('permalink_already_exist'));
+                    }
+                }
+
+                if (count($errors) == 0) {
+                    $_POST['PostsCategory']['id'] = $param2;
+                    $update = $this->postCategory_model->update($this->input->post('PostsCategory'));
+                    if ($update) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_updated'));
+                        redirect(site_url('panel-admin/categories/update/' . $param2), 'refresh');
+                    }
+                }
+            }
+
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "view") {
+            $page_data['page_name'] = 'posts_category';
+            $page_data['page_title'] = get_phrase('categories');
+            $page_data['categories'] = get_post_categories();
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "delete") {
+            if (isset($_POST['id']) && $_POST['id'] == $param2) {
+                $result = ['success' => 0];
+                $delete = $this->postCategory_model->delete($_POST['id']);
+                if ($delete) {
+                    $result['success'] = 1;
+                    $result['message'] = get_phrase('successfully_deleted');
+                } else {
+                    $result['message'] = get_phrase('failed_execution');
+                }
+                echo json_encode($result); exit;
+            }
+        } else {
+            $page_data['page_name'] = 'categories';
+            $page_data['page_title'] = get_phrase('categories');
+            $page_data['posts'] = get_post_categories();
+            $this->load->view('backend/index', $page_data);
+        }
+    }
 }

@@ -55,6 +55,8 @@
                 <li class = "<?php echo is_active('view_posts'); ?>" > <a href="<?php echo site_url('panel-admin/posts/view'); ?>"><?php echo get_phrase('view_posts'); ?></a> </li>
                 <li class = "<?php echo is_active('add_posts'); ?>" > <a href="<?php echo site_url('panel-admin/posts/create'); ?>"><?php echo get_phrase('create_new_post'); ?></a> </li>
                 <li class = "<?php echo is_active('view_comments'); ?>" > <a href="<?php echo site_url('panel-admin/posts/comment'); ?>"><?php echo get_phrase('view_comments'); ?></a> </li>
+                <li class = "<?php echo is_active('view_categories'); ?>" > <a href="<?php echo site_url('panel-admin/categories/view'); ?>"><?php echo get_phrase('view_categories'); ?></a> </li>
+                <li class = "<?php echo is_active('add_category'); ?>" > <a href="<?php echo site_url('panel-admin/categories/create'); ?>"><?php echo get_phrase('create_new_category'); ?></a> </li>
                 <br>
             </ul>
         </li>

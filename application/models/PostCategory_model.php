@@ -104,4 +104,14 @@ class PostCategory_model extends CI_Model {
         $results = $this->db->get('post_category')->result_array();
         return $results;
     }
+
+    public function is_category_exists($slug) {
+        $this->db->where('slug', $slug);
+        $query = $this->db->get('post_category');
+        if ($query->num_rows() > 0){
+            return true;
+        }
+
+        return false;
+    }
 }
