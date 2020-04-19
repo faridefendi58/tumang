@@ -15,3 +15,17 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
+/system/
+/ci_sessions/
+
+#others
+*.sql.gz
+*.twig
+*.zip
+database.php
+/data/
+/logs/
+favicon.png
+/assets/
+/uploads/
+/.idea/
