@@ -870,6 +870,9 @@ class Panel_admin extends CI_Controller {
                         $params['rel_id'] = $cat_id;
                         $params['title'] = $cat_model->title;
                         $params['slug'] = $cat_model->slug;
+                        if (!empty($this->input->post('CategoryLink')['group_id'])) {
+                            $params['group_id'] = $this->input->post('CategoryLink')['group_id'];
+                        }
                         $menu_id = $this->menu_model->create($params);
                         if ($menu_id) {
                             $saved = $saved + 1;

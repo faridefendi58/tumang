@@ -36,6 +36,25 @@ class Blog extends CI_Controller
         }
     }
 
+    public function category($param = "")
+    {
+        $page_data['page_title'] = $param;
+
+        $page_data['page_name'] = 'category';
+        $data = $this->postCategory_model->findByAttributes(['slug' => $param]);
+        $theme_name = get_settings('theme');
+        $this->twig->addGlobal('this', $this);
+        if (!empty($data)) {
+            $page_data['page_title'] = $data->title;
+            $page_data['data'] = $data;
+
+            $this->twig->display('frontend/'. $theme_name .'/category', $page_data);
+        } else {
+            $page_data['page_title'] = '404';
+            $this->twig->display('frontend/'. $theme_name .'/404', $page_data);
+        }
+    }
+
     public function settings($param = "") {
         return get_settings($param);
     }

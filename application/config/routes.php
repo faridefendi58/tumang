@@ -62,6 +62,8 @@ $route['(:any)'] = function ($params) {
     }
     if (in_array($params, $pages)) {
         return 'page/view/'. $params;
+    } else {
+        return 'blog/category/'. $params;
     }
 
     return $params;

@@ -30,3 +30,6 @@ favicon.png
 /uploads/
 /.idea/
 *.log
+application/data/runtime/
+access.log
+error.log
