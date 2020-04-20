@@ -679,8 +679,15 @@ class Panel_admin extends CI_Controller {
 
             if (isset($_POST['Menus'])) {
                 $errors = [];
-                $slug = slugify($this->input->post('Menus')['title']);
-                $_POST['Menus']['slug'] = $slug;
+                $_custom_link = '';
+                if (isset($this->input->post('Menus')['type']) && $this->input->post('Menus')['type'] == Menu_model::TYPE_CUSTOM_LINK) {
+                    $_custom_link = $this->input->post('Menus')['slug'];
+                    $slug = $_custom_link;
+                }
+                if (empty($_custom_link)) {
+                    $slug = slugify($this->input->post('Menus')['title']);
+                    $_POST['Menus']['slug'] = $slug;
+                }
                 $parent_id = 0;
                 if (!empty($this->input->post('Menus')['parent_id'])) {
                     $parent_id = $this->input->post('Menus')['parent_id'];
@@ -694,10 +701,12 @@ class Panel_admin extends CI_Controller {
                     $_POST['Menus']['sort_order'] = $this->menu_model->get_next_sort_order($this->input->post('Menus')['group_id'], $parent_id);
                 }
 
-                $is_menu_exists = $this->menu_model->is_menu_exists($slug);
-                if ($is_menu_exists) {
-                    $this->session->set_flashdata('error_message', get_phrase('menu_already_exist'));
-                    array_push($errors, get_phrase('menu_already_exist'));
+                if (empty($_custom_link)) {
+                    $is_menu_exists = $this->menu_model->is_menu_exists($slug);
+                    if ($is_menu_exists) {
+                        $this->session->set_flashdata('error_message', get_phrase('menu_already_exist'));
+                        array_push($errors, get_phrase('menu_already_exist'));
+                    }
                 }
 
                 if (count($errors) == 0) {
@@ -719,8 +728,15 @@ class Panel_admin extends CI_Controller {
 
             if (isset($_POST['Menus'])) {
                 $errors = [];
-                $old_slug = $page_data['page_data']->slug;
-                $slug = slugify($this->input->post('Menus')['title']);
+                $_custom_link = '';
+                if (isset($this->input->post('Menus')['type']) && $this->input->post('Menus')['type'] == Menu_model::TYPE_CUSTOM_LINK) {
+                    $_custom_link = $this->input->post('Menus')['slug'];
+                    $slug = $_custom_link;
+                }
+                if (empty($_custom_link)) {
+                    $old_slug = $page_data['page_data']->slug;
+                    $slug = slugify($this->input->post('Menus')['title']);
+                }
                 /*if ($slug != $old_slug) {
                     $is_menu_exists = $this->menu_model->is_menu_exists($slug);
                     if ($is_menu_exists) {
@@ -874,7 +890,7 @@ class Panel_admin extends CI_Controller {
                 $this->load->view('backend/index', $page_data);
             }
         } elseif ($param1 == 'type') {
-            if (isset($_POST['type']) && $_POST['type'] != Menu_model::TYPE_CUSTOM_LINK) {
+            if (isset($_POST['type'])) {
                 $page_data['type'] = $_POST['type'];
 
                 $this->load->view('backend/admin/menus_type', $page_data);
@@ -1001,9 +1017,9 @@ class Panel_admin extends CI_Controller {
                 echo json_encode($result); exit;
             }
         } else {
-            $page_data['page_name'] = 'categories';
+            $page_data['page_name'] = 'posts_category';
             $page_data['page_title'] = get_phrase('categories');
-            $page_data['posts'] = get_post_categories();
+            $page_data['categories'] = get_post_categories();
             $this->load->view('backend/index', $page_data);
         }
     }

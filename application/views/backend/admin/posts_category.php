@@ -5,7 +5,7 @@
             <?php echo get_phrase('dashboard'); ?>
         </a>
     </li>
-    <li><a href="#" class="active"><?php echo get_phrase('post_comments'); ?></a> </li>
+    <li><a href="#" class="active"><?php echo get_phrase('categories'); ?></a> </li>
 </ol>
 <h2><i class="fa fa-arrow-circle-o-right"></i> <?php echo $page_title; ?></h2>
 <br />

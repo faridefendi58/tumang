@@ -95,7 +95,6 @@
 <script type="text/javascript">
     function menuType(dt) {
         var $this = $(dt);
-        var url = $this.attr('attr-href');
         $.ajax({
             'url': "<?php echo site_url('panel-admin/menus/type');?>",
             'type':'post',

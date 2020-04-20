@@ -23,9 +23,10 @@ application/logs/*
 *.twig
 *.zip
 database.php
-/data/
+application/data/*
 /logs/
 favicon.png
 /assets/
 /uploads/
 /.idea/
+*.log

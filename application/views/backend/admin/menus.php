@@ -94,7 +94,10 @@
                             <?php endforeach; ?>
 
                             <div class="form-group">
-                                <div class="col-sm-offset-4 col-sm-8">
+                                <div class="col-sm-6">
+                                    <a href="<?php echo site_url('panel-admin/categories/create'); ?>" target="_blank" class="text-info mt10 pull-left"><i class="fa fa-plus"></i> Add Category</a>
+                                </div>
+                                <div class="col-sm-6">
                                     <button type="submit" class="btn btn-success pull-right"><?php echo get_phrase('add_to_menu');?></button>
                                 </div>
                             </div>

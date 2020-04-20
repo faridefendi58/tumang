@@ -66,6 +66,11 @@
                         <div id="menu-type">
                             <?php if ($page_data->type != Menu_model::TYPE_CUSTOM_LINK):?>
                                 <?php $this->load->view('backend/'.$logged_in_user_role.'/menus_type', ['type' => $page_data->type, 'rel_id' => $page_data->rel_id]); ?>
+                            <?php else: ?>
+                            <div class="form-group col-sm-6 col-md-6">
+                                <label class="text-bold">Custom Url</label>
+                                <input type="text" name="Menus[slug]" class="form-control" placeholder="ex: https://www.google.co.id" value="<?php echo $page_data->slug; ?>">
+                            </div>
                             <?php endif; ?>
                         </div>
 
