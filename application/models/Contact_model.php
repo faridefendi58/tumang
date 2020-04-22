@@ -80,6 +80,7 @@ class Contact_model extends CI_Model {
             $this->db->where('contact.'. $attr, $val);
         }
 
+        $this->db->order_by("contact.id", "desc");
         $models = $this->db->get('contact');
         if ($models->num_rows() > 0) {
             $items = $models->result_array();

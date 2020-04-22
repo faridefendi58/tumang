@@ -74,6 +74,17 @@
             </ul>
         </li>
 
+        <li class = "<?php echo is_multi_level_active(['contacts'], 1); ?>">
+            <a href="javascript:;">
+                <i class="fa fa-inbox"></i>
+                <span><?php echo get_phrase('contacts'); ?></span>
+            </a>
+            <ul class="sub-menu">
+                <li class = "<?php echo is_active('view_contacts'); ?>" > <a href="<?php echo site_url('panel-admin/contacts/view'); ?>"><?php echo get_phrase('view_contacts'); ?></a> </li>
+                <br>
+            </ul>
+        </li>
+
         <li class = "<?php echo is_multi_level_active(['system_settings', 'manage_language', 'frontend_settings'], 1); ?>">
             <a href="javascript:;">
                 <i class="fa fa-sliders"></i>

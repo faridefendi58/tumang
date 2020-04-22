@@ -1026,4 +1026,42 @@ class Panel_admin extends CI_Controller {
             $this->load->view('backend/index', $page_data);
         }
     }
+
+    public function contacts($param1 = "", $param2 = "") {
+        if ($this->session->userdata('admin_login') != true) {
+            $this->need_login();
+        }
+
+        $this->session->set_userdata('last_page', 'contacts');
+
+        if ($param1 == 'detail') {
+            $page_data['page_name'] = 'contacts_detail';
+            $page_data['data'] = $this->contact_model->findByPk($param2);
+            $page_data['page_title'] = get_phrase('contacts');
+
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "view") {
+            $page_data['page_name'] = 'contacts';
+            $page_data['page_title'] = get_phrase('contacts');
+            $page_data['items'] = $this->contact_model->get_items();
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "delete") {
+            if (isset($_POST['id']) && $_POST['id'] == $param2) {
+                $result = ['success' => 0];
+                $delete = $this->contact_model->delete($_POST['id']);
+                if ($delete) {
+                    $result['success'] = 1;
+                    $result['message'] = get_phrase('successfully_deleted');
+                } else {
+                    $result['message'] = get_phrase('failed_execution');
+                }
+                echo json_encode($result); exit;
+            }
+        } else {
+            $page_data['page_name'] = 'contacts';
+            $page_data['page_title'] = get_phrase('contacts');
+            $page_data['items'] = $this->contact_model->get_items();
+            $this->load->view('backend/index', $page_data);
+        }
+    }
 }
