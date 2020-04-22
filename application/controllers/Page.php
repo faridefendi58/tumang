@@ -43,4 +43,27 @@ class Page extends CI_Controller
     public function settings($param = "") {
         return get_settings($param);
     }
+
+    public function contact_us() {
+        $success = 0;
+        if (isset($_POST['Contact'])){
+            $_post = $this->input->post('Contact');
+            $id = $this->contact_model->create($_post);
+            if ($id > 0) {
+                $success = 1;
+                try {
+                    $to      = get_settings('system_email');
+                    $subject = '[BMT Tumang] Kontak User';
+                    $message = $_post['message'];
+                    $headers = 'From: '. $_post['email'] .'' . "\r\n" .
+                        'Reply-To: '. $_post['email'] .'' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+                    mail($to, $subject, $message, $headers);
+                } catch (Exception $exception){}
+            }
+        }
+
+        echo ($success > 0)? 'success':'failed';exit;
+    }
 }
