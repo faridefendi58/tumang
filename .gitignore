@@ -33,3 +33,4 @@ favicon.png
 application/data/runtime/
 access.log
 error.log
+*.lock

@@ -264,6 +264,17 @@ if (! function_exists('get_theme_configs')) {
     }
 }
 
+if (! function_exists('has_setting')) {
+    function has_setting($key = '') {
+        $CI	=&	get_instance();
+        $CI->load->database();
+
+        $CI->db->where('key', $key);
+        $query = $CI->db->get('settings');
+        return ($query->num_rows() > 0)? true : false;
+    }
+}
+
 // ------------------------------------------------------------------------
 /* End of file user_helper.php */
 /* Location: ./system/helpers/common.php */

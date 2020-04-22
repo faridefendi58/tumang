@@ -51,7 +51,8 @@ class Page extends CI_Controller
             $id = $this->contact_model->create($_post);
             if ($id > 0) {
                 $success = 1;
-                try {
+                // php basic sendmail
+                /*try {
                     $to      = get_settings('system_email');
                     $subject = '[BMT Tumang] Kontak User';
                     $message = $_post['message'];
@@ -60,7 +61,49 @@ class Page extends CI_Controller
                         'X-Mailer: PHP/' . phpversion();
 
                     mail($to, $subject, $message, $headers);
-                } catch (Exception $exception){}
+                } catch (Exception $exception){}*/
+
+                //send mail to admin
+                $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+                try {
+                    $mail->SMTPDebug = 0;
+                    $has_smtp = has_setting('use_smtp');
+                    if ($has_smtp) {
+                        $use_smtp = get_settings('use_smtp');
+                        if ($use_smtp > 0) {
+                            $mail->isSMTP();
+                            $mail->Host = get_settings('smtp_host');
+                            $mail->SMTPAuth = true;
+                            $mail->Username = get_settings('system_email');
+                            $mail->Password = get_settings('smtp_secret');
+                            $mail->SMTPSecure = get_settings('smtp_secure');
+                            $mail->Port = get_settings('smtp_port');
+                        } else {
+                            $mail->isMail();
+                        }
+                    } else {
+                        $mail->isMail();
+                    }
+
+                    //Recipients
+                    $mail->setFrom( get_settings('system_email'), 'Admin '. get_settings('system_name') );
+                    $mail->addAddress( get_settings('system_email'), 'Admin '. get_settings('system_name') );
+                    $mail->addReplyTo( $_post['email'], $_post['name'] );
+
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = '['. get_settings('system_name') .'] Kontak User';
+                    $mail->Body = "Halo Admin, 
+                    <br/><br/>
+                    Ada pesan baru dari pengunjung dengan data berikut:
+                    <br/><br/>
+                    <b>Nama pengunjung</b> : ".$_post['name']." <br/> 
+                    <b>Alamat Email</b> : ".$_post['email']." <br/>
+                    <br/>
+                    <b>Isi Pesan</b> :<br/> ".$_post['message']."";
+
+                    $mail->send();
+                } catch (Exception $e) {}
             }
         }
 
