@@ -89,6 +89,13 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="form-label"><?php echo get_phrase('fax'); ?></label>
+                                <div class="controls">
+                                    <input type="text" name = "fax" class="form-control" value="<?php echo $this->db->get_where('settings', array('key' => 'fax'))->row()->value; ?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="form-label"><?php echo get_phrase('youtube_API_key'); ?> &nbsp; <a href = "https://developers.google.com/youtube/v3/getting-started" target = "_blank" style="color: #a7a4a4">(<?php echo get_phrase('get_YouTube_API_key'); ?>)</a></label>
                                 <div class="controls">
                                     <input type="text" name = "youtube_api_key" class="form-control" value="<?php echo get_settings('youtube_api_key'); ?>">
@@ -98,12 +105,6 @@
                                 <label class="form-label"><?php echo get_phrase('vimeo_API_key'); ?> &nbsp; <a href = "https://www.youtube.com/watch?v=Wwy9aibAd54" target = "_blank" style="color: #a7a4a4">(<?php echo get_phrase('get_Vimeo_API_key'); ?>)</a></label>
                                 <div class="controls">
                                     <input type="text" name = "vimeo_api_key" class="form-control" value="<?php echo get_settings('vimeo_api_key'); ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><?php echo get_phrase('purchase_code'); ?></label>
-                                <div class="controls">
-                                    <input type="text" name = "purchase_code" class="form-control" value="<?php echo $this->db->get_where('settings', array('key' => 'purchase_code'))->row()->value; ?>">
                                 </div>
                             </div>
 

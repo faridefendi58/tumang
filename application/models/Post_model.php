@@ -41,6 +41,8 @@ class Post_model extends CI_Model {
     }
 
     public function create($data = []) {
+        $data['featured_image'] = $this->upload_featured_image($data);
+        
         $data['created_at'] = date('c');
         $data['created_by'] = $this->session->userdata('user_id');
 
@@ -51,6 +53,8 @@ class Post_model extends CI_Model {
     }
 
     public function update($data) {
+        $data['featured_image'] = $this->upload_featured_image($data);
+        
         $data['updated_at'] = date('c');
         $data['updated_by'] = $this->session->userdata('user_id');
 
@@ -99,5 +103,34 @@ class Post_model extends CI_Model {
         }
 
         return $row;
+    }
+    
+    public function get_by_category($cat_id) {
+        $this->db->select('posts.*, post_in_category.*');
+        $this->db->join('posts', 'posts.id = post_in_category.post_id', 'left');
+        $this->db->where('post_in_category.category_id', $cat_id);
+        $this->db->order_by('posts.created_at', 'desc');
+
+        return $this->db->get('post_in_category')->result_array();
+    }
+    
+    public function get_last_five(){
+        $this->db->select('meta_title, slug');
+        $this->db->order_by('created_at', 'desc');
+        $this->db->limit(5);
+        $result = $this->db->get('posts')->result_array();
+        
+        return $this->db->get('posts')->result_array();
+    }
+    
+    public function upload_featured_image($data){
+        //echo "<pre>";print_r($_FILES);die;
+        if (isset($_FILES['Posts']['tmp_name']) && $_FILES['Posts']['name'] != "") {
+            $name = $data['slug'].'.jpg';
+            move_uploaded_file($_FILES['Posts']['tmp_name']['featured_image'], 'uploads/posts/'.$name);
+            //$this->session->set_flashdata('flash_message', get_phrase('post_featured_image_successfully'));
+            return $name;
+        }
+        return "default.jpg";
     }
 }

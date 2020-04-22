@@ -47,6 +47,10 @@ class Crud_model extends CI_Model {
         $data['value'] = html_escape($this->input->post('phone'));
         $this->db->where('key', 'phone');
         $this->db->update('settings', $data);
+        
+        $data['value'] = html_escape($this->input->post('fax'));
+        $this->db->where('key', 'fax');
+        $this->db->update('settings', $data);
 
         $data['value'] = html_escape($this->input->post('youtube_api_key'));
         $this->db->where('key', 'youtube_api_key');
@@ -56,9 +60,9 @@ class Crud_model extends CI_Model {
         $this->db->where('key', 'vimeo_api_key');
         $this->db->update('settings', $data);
 
-        $data['value'] = html_escape($this->input->post('purchase_code'));
+        /*$data['value'] = html_escape($this->input->post('purchase_code'));
         $this->db->where('key', 'purchase_code');
-        $this->db->update('settings', $data);
+        $this->db->update('settings', $data);*/
 
         $data['value'] = html_escape($this->input->post('footer_text'));
         $this->db->where('key', 'footer_text');

@@ -162,8 +162,9 @@ class Menu_model extends CI_Model {
     }
 
     private function has_child($id) {
-        $this->db->select('menus.id');
+        $this->db->select('menus.id, menus.status');
         $this->db->where('menus.parent_id', $id);
+        $this->db->where('menus.status', 'published');
         $num_rows = $this->db->get('menus')->num_rows();
 
         return ($num_rows > 0)? true : false;
@@ -260,12 +261,15 @@ class Menu_model extends CI_Model {
     }
 
     private $bs_items = '';
+    private $footer_menu = '';
 
-    public function get_bootstrap_menus($group_id = 0, $parent_id = 0, $level = 0, $options = []) {
-        $this->db->select('menus.id, menus.title, menus.slug, menus.type');
+    public function get_bootstrap_menus($group_id = 0, $parent_id = 0, $level = 0, $options = [], $position = 'nav_menu') {
+        if ($position=='nav_menu') $var='bs_items'; else $var=$position;
+        $this->db->select('menus.id, menus.title, menus.slug, menus.type, menus.status');
         $this->db->where('menus.group_id', $group_id);
         $this->db->where('menus.parent_id', $parent_id);
         $this->db->where('menus.level', $level);
+        $this->db->where('menus.status', 'published');
         $this->db->order_by('menus.sort_order', 'asc');
 
         $models = $this->db->get('menus');
@@ -276,20 +280,20 @@ class Menu_model extends CI_Model {
                 if (empty($data_module)) {
                     $data_module = $item['id'];
                 }
-                $this->bs_items .= '<li class="'. $options['li_class'] .'" >';
+                $this->$var .= '<li class="'. $options['li_class'] .'" >';
                 if ($this->has_child($item['id'])) {
-                    $this->bs_items .= '<a href="#" class="'. $options['a_class'] .'">'. $item['title'] .' <i class="flaticon-down-arrow"></i></a>';
-                    $this->bs_items .= '<ul class="'. $options['ul_sub_class'] .'">';
+                    $this->$var .= '<a href="#" class="'. $options['a_class'] .'">'. $item['title'] .' <i class="flaticon-down-arrow"></i></a>';
+                    $this->$var .= '<ul class="'. $options['ul_sub_class'] .'">';
                     $new_level = $level + 1;
-                    $this->get_bootstrap_menus($group_id, $item['id'], $new_level, $options);
-                    $this->bs_items .= '</ul>';
+                    $this->get_bootstrap_menus($group_id, $item['id'], $new_level, $options, $position);
+                    $this->$var .= '</ul>';
                 } else {
-                    $this->bs_items .= '<a href="'. $url .'" class="nav-link active">'. $item['title'] .'</a>';
+                    $this->$var .= '<a href="'. $url .'" class="'. $options['a_class'] .'">'. $item['title'] .'</a>';
                 }
-                $this->bs_items .= '</li>';
+                $this->$var .= '</li>';
             }
         }
 
-        return $this->bs_items;
+        return $this->$var;
     }
 }

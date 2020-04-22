@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="panel-body">
-                <form action="<?php echo site_url('panel-admin/posts/create'); ?>" method="post" role="form" class="padding10">
+                <form action="<?php echo site_url('panel-admin/posts/create'); ?>" method="post" role="form" class="padding10" enctype="multipart/form-data">
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-6 col-lg-6">
                             <label class="text-bold"><?php echo get_phrase('title'); ?> <span class="red">*</span></label>
@@ -66,7 +66,7 @@
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-6 col-lg-6">
                             <label class="text-bold">Category</label>
-                            <select name="Posts[category][]" class="form-control multiple" multiple="true">
+                            <select name="Posts[category][]" class="form-control multiple" multiple="true" size="6">
                                 <?php foreach (get_post_categories() as $ip => $category): ?>
                                     <option value="<?php echo $category['id']; ?>"><?php echo $category['title']; ?></option>
                                 <?php endforeach; ?>
@@ -96,6 +96,26 @@
                                     <?php echo ucfirst($status); ?>
                                 </label>
                             <?php endforeach; ?>
+                        </div>
+                        
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                            <label class="text-bold">Featured Image</label><br/>
+                            <div class="controls">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" style="width: 200px;" data-trigger="fileinput">
+                                        
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
+                                    <div>
+                                        <span class="btn btn-white btn-file">
+                                            <span class="fileinput-new"><?php echo get_phrase('select_image'); ?></span>
+                                            <span class="fileinput-exists"><?php echo get_phrase('change'); ?></span>
+                                            <input type="file" name="Posts[featured_image]" accept="image/*">
+                                        </span>
+                                        <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput"><?php echo get_phrase('remove'); ?></a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
