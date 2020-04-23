@@ -92,21 +92,21 @@
                                             <div class="form-group">
                                                 <label class="form-label"><?php echo get_phrase('facebook'); ?></label>
                                                 <div class="controls">
-                                                    <input type="text" name = "facebook_link" class="form-control" value="<?php echo $social_links['facebook']; ?>" required>
+                                                    <input type="text" name = "facebook_link" class="form-control" value="<?php echo $social_links['facebook']; ?>">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label"><?php echo get_phrase('twitter'); ?></label>
                                                 <div class="controls">
-                                                    <input type="text" name = "twitter_link" class="form-control" value="<?php echo $social_links['twitter']; ?>" required>
+                                                    <input type="text" name = "twitter_link" class="form-control" value="<?php echo $social_links['twitter']; ?>">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label"><?php echo get_phrase('linkedin'); ?></label>
                                                 <div class="controls">
-                                                    <input type="text" name = "linkedin_link" class="form-control" value="<?php echo $social_links['linkedin']; ?>" required>
+                                                    <input type="text" name = "linkedin_link" class="form-control" value="<?php echo $social_links['linkedin']; ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
                                                 <div class="controls">
                                                     <textarea rows="5" class="form-control wysihtml5" data-stylesheet-url="<?php echo base_url('assets/backend/css/wysihtml5-color.css');?>"
                                                         name="biography" placeholder="<?php echo get_phrase('biography'); ?>"
-                                                        id="sample_wysiwyg" required><?php echo $user_data['biography']; ?></textarea>
+                                                        id="sample_wysiwyg"><?php echo $user_data['biography']; ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel panel-default">
+                            <?/*<div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
@@ -175,7 +175,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>*/?>
                         </div>
                     </div>
 

@@ -85,12 +85,13 @@
             </ul>
         </li>
 
-        <li class = "<?php echo is_multi_level_active(['system_settings', 'manage_language', 'frontend_settings'], 1); ?>">
+        <li class = "<?php echo is_multi_level_active(['system_settings', 'manage_language', 'frontend_settings','users'], 1); ?>">
             <a href="javascript:;">
                 <i class="fa fa-sliders"></i>
 				<span><?php echo get_phrase('settings'); ?></span>
             </a>
             <ul class="sub-menu">
+                <li class = "<?php echo is_active('users'); ?>" > <a href="<?php echo site_url('panel-admin/users'); ?>"><?php echo get_phrase('user'); ?></a> </li>
                 <li class = "<?php echo is_active('system_settings'); ?>" > <a href="<?php echo site_url('panel-admin/system-settings'); ?>"><?php echo get_phrase('system_settings'); ?></a> </li>
                 <li class = "<?php echo is_active('frontend_settings'); ?>" > <a href="<?php echo site_url('panel-admin/frontend-settings'); ?>"><?php echo get_phrase('frontend_settings'); ?></a> </li>
                 <li class = "<?php echo is_active('manage_language'); ?>" > <a href="<?php echo site_url('panel-admin/manage-language'); ?>"><?php echo get_phrase('manage_language'); ?></a> </li>

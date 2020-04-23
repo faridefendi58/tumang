@@ -5,8 +5,8 @@
             <?php echo get_phrase('dashboard'); ?>
         </a>
     </li>
-    <li><a href="<?php echo site_url('panel-admin/users'); ?>"><?php echo get_phrase('students'); ?></a> </li>
-    <li><a href="#" class="active"><?php echo get_phrase('add_students'); ?></a> </li>
+    <li><a href="<?php echo site_url('panel-admin/users'); ?>"><?php echo get_phrase('users'); ?></a> </li>
+    <li><a href="#" class="active"><?php echo get_phrase('add_users'); ?></a> </li>
 </ol>
 <h2><i class="fa fa-arrow-circle-o-right"></i> <?php echo $page_title; ?></h2>
 <br />
@@ -16,7 +16,7 @@
 		<div class="panel panel-primary" data-collapsed="0">
             <div class="panel-heading">
 				<div class="panel-title">
-					<?php echo get_phrase('student_add_form'); ?>
+					<?php echo get_phrase('user_add_form'); ?>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -97,21 +97,21 @@
                                                 <div class="form-group">
                                                     <label class="form-label"><?php echo get_phrase('facebook'); ?></label>
                                                     <div class="controls">
-                                                        <input type="text" name = "facebook_link" class="form-control" required>
+                                                        <input type="text" name = "facebook_link" class="form-control">
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="form-label"><?php echo get_phrase('twitter'); ?></label>
                                                     <div class="controls">
-                                                        <input type="text" name = "twitter_link" class="form-control" required>
+                                                        <input type="text" name = "twitter_link" class="form-control">
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="form-label"><?php echo get_phrase('linkedin'); ?></label>
                                                     <div class="controls">
-                                                        <input type="text" name = "linkedin_link" class="form-control" required>
+                                                        <input type="text" name = "linkedin_link" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
@@ -135,7 +135,7 @@
                                                     <div class="controls">
                                                         <textarea rows="5" class="form-control wysihtml5" data-stylesheet-url="<?php echo base_url('assets/backend/css/wysihtml5-color.css');?>"
                                                             name="biography" placeholder="<?php echo get_phrase('biography'); ?>"
-                                                            id="sample_wysiwyg" required></textarea>
+                                                            id="sample_wysiwyg"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,7 +143,7 @@
                                     </div>
                                 </div>
 
-                                <div class="panel panel-default">
+                                <?/*<div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
@@ -176,7 +176,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>*/?>
                             </div>
                     </div>
                     <div class="col-md-4">

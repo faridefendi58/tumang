@@ -279,4 +279,16 @@ class Crud_model extends CI_Model {
             }
         }
     }
+    
+    public function update_banner_text(){
+        $data['title'] = $this->input->post('title');
+        $data['sub_title'] = $this->input->post('sub_title');
+        $data['content'] = $this->input->post('content');
+        $data['button_link'] = $this->input->post('button_link');
+        $data['button_text'] = $this->input->post('button_text');
+        
+        $file_handle = fopen('assets/banner_text.json', 'w'); 
+        fwrite($file_handle, json_encode($data));
+        fclose($file_handle);
+    }
 }

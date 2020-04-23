@@ -151,6 +151,10 @@ class Twig
             new \Twig_SimpleFilter('dump', function ($string) {
                 return var_dump($string);
             }),
+            new \Twig_SimpleFilter('content', function ($string) {
+                if (file_exists($string)) return file_get_contents($string);
+                else return "";
+            }),
             new \Twig_SimpleFilter('link', function ($string) use ($base_url) {
                 $end = substr($base_url, -1);
                 if ($end == "/") {

@@ -181,7 +181,7 @@ class Panel_admin extends CI_Controller {
 
         $this->session->set_userdata('last_page', 'users');
         $page_data['page_name'] = 'users';
-        $page_data['page_title'] = get_phrase('student');
+        $page_data['page_title'] = get_phrase('users');
         $page_data['users'] = $this->user_model->get_user($param2);
         $this->load->view('backend/index', $page_data);
     }
@@ -193,13 +193,13 @@ class Panel_admin extends CI_Controller {
 
         if ($param1 == 'add_user_form') {
             $page_data['page_name'] = 'user_add';
-            $page_data['page_title'] = get_phrase('student_add');
+            $page_data['page_title'] = get_phrase('user_add');
             $this->load->view('backend/index', $page_data);
         }
         elseif ($param1 == 'edit_user_form') {
             $page_data['page_name'] = 'user_edit';
             $page_data['user_id'] = $param2;
-            $page_data['page_title'] = get_phrase('student_edit');
+            $page_data['page_title'] = get_phrase('user_edit');
             $this->load->view('backend/index', $page_data);
         }
     }
@@ -260,6 +260,13 @@ class Panel_admin extends CI_Controller {
         if ($param1 == 'theme_update') {
             $this->crud_model->update_theme();
             $this->session->set_flashdata('flash_message', get_phrase('theme_update'));
+            redirect(site_url('panel-admin/frontend_settings'), 'refresh');
+        }
+        
+        if ($param1 == 'home_banner_text') {
+            $this->crud_model->update_banner_text();
+            
+            $this->session->set_flashdata('flash_message', get_phrase('home_banner_text_updated'));
             redirect(site_url('panel-admin/frontend_settings'), 'refresh');
         }
 
