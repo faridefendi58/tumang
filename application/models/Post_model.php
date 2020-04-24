@@ -105,11 +105,12 @@ class Post_model extends CI_Model {
         return $row;
     }
     
-    public function get_by_category($cat_id) {
+    public function get_by_category($cat_id, $limit = 20) {
         $this->db->select('posts.*, post_in_category.*');
         $this->db->join('posts', 'posts.id = post_in_category.post_id', 'left');
         $this->db->where('post_in_category.category_id', $cat_id);
         $this->db->order_by('posts.created_at', 'desc');
+        $this->db->limit($limit);
 
         return $this->db->get('post_in_category')->result_array();
     }
@@ -132,5 +133,27 @@ class Post_model extends CI_Model {
             return $name;
         }
         return "default.jpg";
+    }
+
+    public function get_comments($data = []) {
+        $this->db->select('*');
+        if (isset($data['post_id'])) {
+            $this->db->where('post_id', $data['post_id']);
+        }
+
+        if (isset($data['status'])) {
+            $this->db->where('status', $data['status']);
+        }
+
+        $this->db->order_by('id', 'desc');
+        $limit = 20;
+        if (isset($data['limit'])) {
+            $limit = $data['limit'];
+        }
+        $this->db->limit($limit);
+
+        $items = $this->db->get('post_comments')->result_array();
+
+        return $items;
     }
 }

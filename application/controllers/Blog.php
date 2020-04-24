@@ -28,6 +28,7 @@ class Blog extends CI_Controller
         if (!empty($data)) {
             $page_data['page_title'] = $data->meta_title;
             $page_data['data'] = $data;
+            $page_data['comments'] = $this->post_model->get_comments(['post_id' => $data->id, 'status' => 'approved', 'limit' => 20]);
 
             $this->twig->display('frontend/'. $theme_name .'/blog', $page_data);
         } else {
@@ -69,7 +70,7 @@ class Blog extends CI_Controller
                     $success = 1;
                     $model = $this->post_model->findByPk($_post['post_id']);
                     //send mail to admin
-                    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+                    /*$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
                     try {
                         $mail->SMTPDebug = 0;
                         $has_smtp = has_setting('use_smtp');
@@ -109,7 +110,27 @@ class Blog extends CI_Controller
                     <b>Komentar</b> :<br/> ".$_post['content']."";
 
                         $mail->send();
-                    } catch (Exception $e) {}
+                    } catch (Exception $e) {}*/
+
+                    // fungsi standard email u/ hemat limit smtp (tidak urgent bgt)
+                    try {
+                        $to      = get_settings('system_email');
+                        $subject = '['. get_settings('system_name') .'] Komentar User';
+                        $message = "Halo Admin, 
+                            <br/><br/>
+                            Ada komentar baru dari pengunjung dengan data berikut:
+                            <br/><br/>
+                            <b>Artikel</b> : <a href='". site_url('blog/'. $model->slug) ."'>". $model->meta_title ."</a> <br/> 
+                            <b>Nama pengunjung</b> : ".$_post['author_name']." <br/> 
+                            <b>Alamat Email</b> : ".$_post['author_email']." <br/>
+                            <br/>
+                            <b>Komentar</b> :<br/> ".$_post['content']."";
+                        $headers = 'From: '. $_post['author_email'] .'' . "\r\n" .
+                            'Reply-To: '. $_post['author_email'] .'' . "\r\n" .
+                            'X-Mailer: PHP/' . phpversion();
+
+                        mail($to, $subject, $message, $headers);
+                    } catch (Exception $exception){}
                 }
             }
         }

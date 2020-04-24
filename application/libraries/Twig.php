@@ -168,6 +168,9 @@ class Twig
             new \Twig_SimpleFilter('html_entity_decode', function ($string) {
                 return html_entity_decode($string);
             }),
+            new \Twig_SimpleFilter('file_exists', function ($string) {
+                return file_exists($string);
+            }),
         ];
 
         foreach ($filters as $i => $filter) {
