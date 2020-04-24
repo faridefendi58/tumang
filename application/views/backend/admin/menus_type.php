@@ -11,7 +11,7 @@ if ($type == Menu_model::TYPE_PAGE) {
 <div class="form-group col-sm-6 col-md-6">
     <label class="text-bold"><?php echo ucfirst($type); ?> <span class="red">*</span></label>
     <?php if ($type != Menu_model::TYPE_CUSTOM_LINK): ?>
-        <select name="Menus[rel_id]" class="form-control">
+        <select name="Menus[rel_id]" class="form-control" onchange="rebuildSlug(this);">
             <option value="">- <?php echo get_phrase('choose');?> <?php echo ucfirst($type); ?> -</option>
             <?php foreach ($items as $i => $item): ?>
                 <?php
@@ -21,13 +21,23 @@ if ($type == Menu_model::TYPE_PAGE) {
                     $title = $item['title'];
                 }
                 ?>
-                <option value="<?php echo $item['id']; ?>" <?php if (!empty($rel_id) && $rel_id == $item['id']):?>selected="selected"<?php endif; ?>><?php echo $title; ?></option>
+                <option value="<?php echo $item['id']; ?>" <?php if (!empty($rel_id) && $rel_id == $item['id']):?>selected="selected"<?php endif; ?> attr-slug="<?php echo $item['slug']; ?>"><?php echo $title; ?></option>
             <?php endforeach; ?>
         </select>
         <?php if ($type == Menu_model::TYPE_CATEGORY):?>
             <a href="<?php echo site_url('panel-admin/categories/create'); ?>" target="_blank" class="text-info mt10 pull-right"><i class="fa fa-plus"></i> Add Category</a>
+            <input type="hidden" name="Menus[slug]" id="hidden-slug">
         <?php endif; ?>
     <?php else: ?>
         <input type="text" name="Menus[slug]" class="form-control" placeholder="ex: https://www.google.co.id">
     <?php endif; ?>
 </div>
+<script type="text/javascript">
+    function rebuildSlug(dt) {
+        var $this = $(dt);
+        var slug = $('option:selected', dt).attr('attr-slug');
+        if ($('#hidden-slug').length > 0) {
+            $('#hidden-slug').val(slug);
+        }
+    }
+</script>

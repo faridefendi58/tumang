@@ -67,6 +67,7 @@ class Page extends CI_Controller
                 $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
                 try {
                     $mail->SMTPDebug = 0;
+                    $mail->do_debug = 0;
                     $has_smtp = has_setting('use_smtp');
                     if ($has_smtp) {
                         $use_smtp = get_settings('use_smtp');
@@ -74,7 +75,7 @@ class Page extends CI_Controller
                             $mail->isSMTP();
                             $mail->Host = get_settings('smtp_host');
                             $mail->SMTPAuth = true;
-                            $mail->Username = get_settings('system_email');
+                            $mail->Username = get_settings('smtp_user');
                             $mail->Password = get_settings('smtp_secret');
                             $mail->SMTPSecure = get_settings('smtp_secure');
                             $mail->Port = get_settings('smtp_port');

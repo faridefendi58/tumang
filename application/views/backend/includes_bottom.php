@@ -89,7 +89,7 @@ $(document).ready(function() {
 
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
-                xhr.open('POST', '<?php echo site_url("admin/posts/direct-upload"); ?>');
+                xhr.open('POST', '<?php echo site_url("panel-admin/posts/direct-upload"); ?>');
 
                 xhr.onload = function() {
                     var json;

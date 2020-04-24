@@ -58,4 +58,62 @@ class Blog extends CI_Controller
     public function settings($param = "") {
         return get_settings($param);
     }
+
+    public function comment($param = "") {
+        $success = 0;
+        if (isset($_POST['PostComment'])){
+            $_post = $this->input->post('PostComment');
+            if ($_post['post_id'] == $param) {
+                $id = $this->postComment_model->create($_post);
+                if ($id > 0) {
+                    $success = 1;
+                    $model = $this->post_model->findByPk($_post['post_id']);
+                    //send mail to admin
+                    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+                    try {
+                        $mail->SMTPDebug = 0;
+                        $has_smtp = has_setting('use_smtp');
+                        if ($has_smtp) {
+                            $use_smtp = get_settings('use_smtp');
+                            if ($use_smtp > 0) {
+                                $mail->isSMTP();
+                                $mail->Host = get_settings('smtp_host');
+                                $mail->SMTPAuth = true;
+                                $mail->Username = get_settings('smtp_user');
+                                $mail->Password = get_settings('smtp_secret');
+                                $mail->SMTPSecure = get_settings('smtp_secure');
+                                $mail->Port = get_settings('smtp_port');
+                            } else {
+                                $mail->isMail();
+                            }
+                        } else {
+                            $mail->isMail();
+                        }
+
+                        //Recipients
+                        $mail->setFrom( get_settings('system_email'), 'Admin '. get_settings('system_name') );
+                        $mail->addAddress( get_settings('system_email'), 'Admin '. get_settings('system_name') );
+                        $mail->addReplyTo( $_post['author_email'], $_post['author_name'] );
+
+                        //Content
+                        $mail->isHTML(true);
+                        $mail->Subject = '['. get_settings('system_name') .'] Komentar User';
+                        $mail->Body = "Halo Admin, 
+                    <br/><br/>
+                    Ada pesan baru dari pengunjung dengan data berikut:
+                    <br/><br/>
+                    <b>Artikel</b> : <a href='". site_url('blog/'. $model->slug) ."'>". $model->meta_title ."</a> <br/> 
+                    <b>Nama pengunjung</b> : ".$_post['author_name']." <br/> 
+                    <b>Alamat Email</b> : ".$_post['author_email']." <br/>
+                    <br/>
+                    <b>Komentar</b> :<br/> ".$_post['content']."";
+
+                        $mail->send();
+                    } catch (Exception $e) {}
+                }
+            }
+        }
+
+        echo ($success > 0)? 'success':'failed';exit;
+    }
 }
