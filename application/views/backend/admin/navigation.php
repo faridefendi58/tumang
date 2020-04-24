@@ -85,6 +85,17 @@
             </ul>
         </li>
 
+        <li class = "<?php echo is_multi_level_active(['job_applications'], 1); ?>">
+            <a href="javascript:;">
+                <i class="fa fa-file"></i>
+                <span><?php echo get_phrase('job_applications'); ?></span>
+            </a>
+            <ul class="sub-menu">
+                <li class = "<?php echo is_active('overview'); ?>" > <a href="<?php echo site_url('panel-admin/job-applications/view'); ?>"><?php echo get_phrase('overview'); ?></a> </li>
+                <br>
+            </ul>
+        </li>
+
         <li class = "<?php echo is_multi_level_active(['system_settings', 'manage_language', 'frontend_settings','users'], 1); ?>">
             <a href="javascript:;">
                 <i class="fa fa-sliders"></i>

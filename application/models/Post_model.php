@@ -156,4 +156,18 @@ class Post_model extends CI_Model {
 
         return $items;
     }
+
+    public function get_post_category($post_id) {
+        $this->db->select('post_in_category.category_id, post_category.slug');
+        $this->db->where('post_in_category.post_id', $post_id);
+        $this->db->join('post_category', 'post_category.id = post_in_category.category_id', 'left');
+
+        $items = $this->db->get('post_in_category')->result_array();
+
+        $_categories = [];
+        foreach ($items as $item) {
+            $_categories[$item['category_id']] = $item['slug'];
+        }
+        return $_categories;
+    }
 }

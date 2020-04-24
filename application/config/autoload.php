@@ -142,5 +142,6 @@ $autoload['model'] = [
     'postComment_model',
     'menu_model',
     'menuGroup_model',
-    'contact_model'
+    'contact_model',
+    'jobApplication_model'
 ];
