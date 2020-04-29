@@ -1113,4 +1113,106 @@ class Panel_admin extends CI_Controller {
             $this->load->view('backend/index', $page_data);
         }
     }
+    
+    public function section_chart($param1 = "", $param2 = ""){
+        if ($this->session->userdata('admin_login') != true) {
+            $this->need_login();
+        }
+
+        $this->session->set_userdata('last_page', 'section_chart');
+        
+        if ($param1 == 'new'){
+            $page_data['page_name'] = 'add_new_chart_value';
+            $page_data['page_title'] = get_phrase('add_new_chart_value');
+
+            if (isset($_POST['chart'])){
+                $errors = [];
+                $is_date_exists = $this->Chart_model->is_date_chart_exists($this->input->post('chart')['date']);
+                if ($is_date_exists){
+                    $this->session->set_flashdata('error_message', get_phrase('date_already_exist'));
+                    array_push($errors, get_phrase('date_already_exist'));
+                }
+                
+                if (count($errors) == 0) {
+                    $id = $this->Chart_model->create($this->input->post('chart'));
+                    if ($id > 0) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_chart_value_is_successfully_added'));
+                        redirect(site_url('panel-admin/section-chart/update/' . $id), 'refresh');
+                    }
+                }
+            }
+
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == 'update'){
+            $page_data['page_name'] = 'update_chart_value';
+            $page_data['page_title'] = get_phrase('update_chart_value');
+            $page_data['item'] = $this->Chart_model->get_item(['id'=>$param2]);
+            if (isset($_POST['chart']) && is_object($page_data['item'])){
+                $errors = [];
+                if ( date("d-m-Y", strtotime($page_data['item']->date)) != $this->input->post('chart')['date'] ){
+                    $is_date_exists = $this->Chart_model->is_date_chart_exists($this->input->post('chart')['date']);
+                    if ($is_date_exists){
+                        $this->session->set_flashdata('error_message', get_phrase('date_already_exist'));
+                        array_push($errors, get_phrase('date_already_exist'));
+                    }
+                }
+                
+                if (count($errors) == 0) {
+                    $_POST['chart']['id'] = $param2;
+                    $update = $this->Chart_model->update($this->input->post('chart'));
+                    if ($update) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_updated'));
+                        redirect(site_url('panel-admin/section_chart/update/' . $param2), 'refresh');
+                    }
+                }
+            }
+            $this->load->view('backend/index', $page_data);
+            
+        } elseif ($param1 == 'view'){
+            $page_data['page_name'] = 'section_chart_view';
+            $page_data['page_title'] = get_phrase('section_chart_view');
+            if (isset($_POST['start']) && isset($_POST['end']) ) {
+                $result = ['success' => 0];
+                $datas = $this->Chart_model->get_items_by_date(['start'=>$this->input->post('start'), 'end'=>$this->input->post('end')]);
+                if (count($datas)>0){
+                    $result = ['success' => 1];
+                    foreach($datas as $data){
+                        $arr = array();
+                        $arr[] = date("d-m-Y", strtotime($data['date']));
+                        $arr[] = floatval($data['low']);
+                        $arr[] = floatval($data['open']);
+                        $arr[] = floatval($data['close']);
+                        $arr[] = floatval($data['high']);
+                        $arr[] = 'Open : '.$data['open'].'
+                                Close : '.$data['close'].'
+                                Low : '.$data['low'].'
+                                High : '.$data['high']
+                            ;
+                        $result['data'][] = $arr;
+                    }
+                } else {
+                    $result['message'] = get_phrase('data_not_found');
+                }
+                echo json_encode($result); exit;
+            }
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == 'delete'){
+            if (isset($_POST['id']) && $_POST['id'] == $param2) {
+                $result = ['success' => 0];
+                $delete = $this->Chart_model->delete($_POST['id']);
+                if ($delete) {
+                    $result['success'] = 1;
+                    $result['message'] = get_phrase('successfully_deleted');
+                } else {
+                    $result['message'] = get_phrase('failed_execution');
+                }
+                echo json_encode($result); exit;
+            }
+        } else {
+            $page_data['page_name'] = 'section_chart';
+            $page_data['page_title'] = get_phrase('section_chart');
+            $page_data['items'] = $this->Chart_model->get_items();
+            $this->load->view('backend/index', $page_data);
+        }
+    }
 }

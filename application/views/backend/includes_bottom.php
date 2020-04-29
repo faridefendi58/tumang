@@ -32,8 +32,10 @@
 <script src="<?php echo base_url('assets/backend/js/wysihtml5/wysihtml5-0.4.0pre.min.js');?>"></script>
 <script src="<?php echo base_url('assets/backend/js/wysihtml5/bootstrap-wysihtml5.js');?>"></script>
 <script src="<?php echo base_url('assets/backend/js/fileinput.js');?>"></script>
-<script src="<?php echo base_url('assets/backend/js/daterangepicker/moment.min.js');?>"></script>
-<script src="<?php echo base_url('assets/backend/js/daterangepicker/daterangepicker.js');?>"></script>
+<!-- <script src="<?php echo base_url('assets/backend/js/daterangepicker/moment.min.js');?>"></script> -->
+<!-- <script src="<?php echo base_url('assets/backend/js/daterangepicker/daterangepicker.js');?>"></script> --!>
+<script src="<?php echo base_url('assets/backend/js/daterangepicker3.0.5/moment.min.js');?>"></script>
+<script src="<?php echo base_url('assets/backend/js/daterangepicker3.0.5/daterangepicker.js');?>"></script>
 <script src="<?php echo base_url('assets/backend/js/font-awesome-icon-picker/fontawesome-four-iconpicker.min.js');?>" charset="utf-8"></script>
 <!-- <script src="<?php echo base_url('assets/backend/js/font-awesome-icon-picker/fontawesome-iconpicker.min.js');?>" charset="utf-8"></script> -->
 <script src="<?php echo base_url('assets/backend/js/bootstrap-tagsinput.min.js'); ?>"></script>

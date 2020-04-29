@@ -21,7 +21,8 @@
 
 <!-- <link rel="stylesheet" href="<?php echo base_url('assets/backend/css/font-icons/simple-line-icon/css/simple-line-icons.css');?>"> -->
 <link rel="stylesheet" href="<?php echo base_url('assets/backend/js/wysihtml5/bootstrap-wysihtml5.css');?>">
-<link rel="stylesheet" href="<?php echo base_url('assets/backend/js/daterangepicker/daterangepicker-bs3.css');?>">
+<!-- <link rel="stylesheet" href="<?php echo base_url('assets/backend/js/daterangepicker/daterangepicker-bs3.css');?>"> -->
+<link rel="stylesheet" href="<?php echo base_url('assets/backend/js/daterangepicker3.0.5/daterangepicker.css');?>">
 <!-- <link rel="stylesheet" href="<?php echo base_url('assets/backend/css/font-awesome-icon-picker/fontawesome-iconpicker.min.css');?>"> -->
 <link rel="stylesheet" href="<?php echo base_url('assets/backend/css/font-awesome-icon-picker/fontawesome-four-iconpicker.min.css');?>">
 <!-- <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet"> -->

@@ -61,7 +61,7 @@
             </ul>
         </li>
 
-        <li class = "<?php echo is_multi_level_active(['appearance', 'themes', 'menus', 'editor'], 1); ?>">
+        <li class = "<?php echo is_multi_level_active(['appearance', 'themes', 'menus', 'editor', 'section_chart'], 1); ?>">
             <a href="javascript:;">
                 <i class="fa fa-paint-brush"></i>
                 <span><?php echo get_phrase('appearance'); ?></span>
@@ -70,6 +70,14 @@
                 <li class = "<?php echo is_active('themes'); ?>" > <a href="<?php echo site_url('panel-admin/themes'); ?>"><?php echo get_phrase('themes'); ?></a> </li>
                 <li class = "<?php echo is_active('menus'); ?>" > <a href="<?php echo site_url('panel-admin/menus'); ?>"><?php echo get_phrase('menus'); ?></a> </li>
                 <li class = "<?php echo is_active('editor'); ?>" > <a href="<?php echo site_url('panel-admin/theme-editor'); ?>"><?php echo get_phrase('editor'); ?></a> </li>
+                <li class = "<?php echo is_multi_level_active(['section_chart'], 1); ?>" >
+                    <a href="javascript:;">
+                        <span><?php echo get_phrase('Section Page'); ?></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li class = "<?php echo is_active('section_chart'); ?>" ><a href="<?=site_url('panel-admin/section-chart'); ?>">Charts</a></li>
+                    </ul>
+                </li>
                 <br>
             </ul>
         </li>

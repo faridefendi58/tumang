@@ -143,5 +143,6 @@ $autoload['model'] = [
     'menu_model',
     'menuGroup_model',
     'contact_model',
-    'jobApplication_model'
+    'jobApplication_model',
+    'Chart_model'
 ];
