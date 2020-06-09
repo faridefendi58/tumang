@@ -1215,4 +1215,132 @@ class Panel_admin extends CI_Controller {
             $this->load->view('backend/index', $page_data);
         }
     }
+
+    public function slide_show($param1 = "", $param2 = "") {
+        if ($this->session->userdata('admin_login') != true) {
+            $this->need_login();
+        }
+
+        $this->session->set_userdata('last_page', 'slide_show');
+
+        if ($param1 == 'detail') {
+            $page_data['page_name'] = 'slide_show_detail';
+            $mdl = $this->slideShow_model->get_item(['id' => $param2]);
+            $page_data['data'] = $mdl;
+            $page_data['page_title'] = get_phrase('slide_show');
+
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "create") {
+            $page_data['page_name'] = 'slide_show_create';
+            $page_data['page_title'] = get_phrase('slide_show');
+            $page_data['categories'] = $this->slideShow_model->get_categories();
+
+            $errors = [];
+            if (isset($_POST['SlideShow'])) {
+                $uploadfile = null;
+                if (!empty($_FILES['image']['name'])) {
+                    $path_info = pathinfo($_FILES['image']['name']);
+                    if (!in_array($path_info['extension'], ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp'])) {
+                        array_push($errors, 'Tipe dokumen yang diperbolehkan hanya jpg, jpeg, webp, dan png');
+                    }
+
+                    $uploadfile = 'uploads/slides/' . time() . '.' . $path_info['extension'];
+                    if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+                        array_push($errors, 'Gagal mengupload dokumen');
+                    }
+                }
+
+                if (count($errors) <= 0) {
+                    $_post_data = $this->input->post('SlideShow');
+                    if (!empty($uploadfile)) {
+                        $_post_data['image'] = $uploadfile;
+                    }
+
+                    if (is_array($_post_data['configs'])) {
+                        $_post_data['configs'] = json_encode($_post_data['configs']);
+                    }
+
+                    $id = $this->slideShow_model->create($_post_data);
+                    if ($id > 0) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_saved'));
+                        redirect(site_url('panel-admin/slide-show/update/' . $id), 'refresh');
+                    }
+                } else {
+                    $this->session->set_flashdata('error_message',get_phrase(implode(", ", $errors)));
+                }
+            }
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "update") {
+            $page_data['page_name'] = 'slide_show_update';
+            $mdl = $this->slideShow_model->get_item(['id' => $param2]);
+            $page_data['data'] = $mdl;
+            $page_data['page_title'] = get_phrase('slide_show');
+            $page_data['categories'] = $this->slideShow_model->get_categories();
+
+            $errors = [];
+            if (isset($_POST['SlideShow'])) {
+                $uploadfile = $mdl->image;
+                if (isset($_FILES['image']['name'])) {
+                    $path_info = pathinfo($_FILES['image']['name']);
+                    if (array_key_exists('extension', $path_info)) {
+                        if (!in_array($path_info['extension'], ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp'])) {
+                            array_push($errors, 'Tipe dokumen yang diperbolehkan hanya jpg, jpeg, webp, dan png');
+                        }
+
+                        $uploadfile = 'uploads/slides/' . time() . '.' . $path_info['extension'];
+                        if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+                            array_push($errors, 'Gagal mengupload dokumen');
+                        }
+                    }
+                }
+
+                if (count($errors) <= 0) {
+                    $_post_data = $this->input->post('SlideShow');
+                    $_post_data['id'] = $param2;
+                    if (!empty($uploadfile)) {
+                        $_post_data['image'] = $uploadfile;
+                    }
+                    if (is_array($_post_data['configs'])) {
+                        $_post_data['configs'] = json_encode($_post_data['configs']);
+                    }
+
+                    $update = $this->slideShow_model->update($_post_data);
+                    if ($update) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_saved'));
+                        redirect(site_url('panel-admin/slide-show/update/' . $param2), 'refresh');
+                    }
+                } else {
+                    $this->session->set_flashdata('error_message',get_phrase(implode(", ", $errors)));
+                }
+            }
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "view") {
+            $page_data['page_name'] = 'slide_show';
+            $page_data['page_title'] = get_phrase('slide_show');
+            $page_data['items'] = $this->slideShow_model->get_items();
+            $this->load->view('backend/index', $page_data);
+        } elseif ($param1 == "delete") {
+            if (isset($_POST['id']) && $_POST['id'] == $param2) {
+                $result = ['success' => 0];
+                $model = $this->slideShow_model->findByPk($_POST['id']);
+                $image = $model->image;
+                $delete = $this->slideShow_model->delete($_POST['id']);
+                if ($delete) {
+                    if (file_exists($image)) {
+                        unlink($image);
+                    }
+                    $result['success'] = 1;
+                    $result['message'] = get_phrase('successfully_deleted');
+                } else {
+                    $result['message'] = get_phrase('failed_execution');
+                }
+                echo json_encode($result); exit;
+            }
+        } else {
+            $page_data['page_name'] = 'slide_show';
+            $page_data['page_title'] = get_phrase('slide_show');
+            $page_data['items'] = $this->slideShow_model->get_items();
+            $this->load->view('backend/index', $page_data);
+        }
+    }
 }

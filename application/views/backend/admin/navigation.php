@@ -61,7 +61,7 @@
             </ul>
         </li>
 
-        <li class = "<?php echo is_multi_level_active(['appearance', 'themes', 'menus', 'editor', 'section_chart'], 1); ?>">
+        <li class = "<?php echo is_multi_level_active(['appearance', 'themes', 'menus', 'editor', 'section_chart', 'slide_show'], 1); ?>">
             <a href="javascript:;">
                 <i class="fa fa-paint-brush"></i>
                 <span><?php echo get_phrase('appearance'); ?></span>
@@ -78,6 +78,7 @@
                         <li class = "<?php echo is_active('section_chart'); ?>" ><a href="<?=site_url('panel-admin/section-chart'); ?>">Charts</a></li>
                     </ul>
                 </li>
+                <li class = "<?php echo is_active('slide_show'); ?>" > <a href="<?php echo site_url('panel-admin/slide-show'); ?>"><?php echo get_phrase('slide_show'); ?></a> </li>
                 <br>
             </ul>
         </li>
