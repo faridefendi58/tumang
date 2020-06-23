@@ -49,7 +49,7 @@ class Panel_admin extends CI_Controller {
             $this->session->set_userdata('role_id', $row->role_id);
             $this->session->set_userdata('role', get_user_role('user_role', $row->role_id));
             $this->session->set_userdata('name', $row->first_name.' '.$row->last_name);
-            if ($row->role_id == 1) {
+            if ($row->role_id <= 2) {
                 $this->session->set_userdata('admin_login', '1');
                 $r = $this->session->userdata('r');
                 if (!empty($r) && ($r != 'panel-admin/login')) {
@@ -58,7 +58,7 @@ class Panel_admin extends CI_Controller {
                 } else {
                     redirect(site_url('panel-admin/dashboard'), 'refresh');
                 }
-            }else if($row->role_id == 2){
+            } else {
                 $this->session->set_userdata('user_login', '1');
                 redirect(site_url('home'), 'refresh');
             }

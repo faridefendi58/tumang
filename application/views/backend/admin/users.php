@@ -35,14 +35,10 @@
                               <td><?php echo $user['email']; ?></td>
                               <td><?php echo date('D, d-M-Y', $user['date_added']); ?></td>
                               <td>
+                                <?php if ($this->session->userdata('user_id') != $user['id']): ?>
                                   <div class="btn-group">
                                       <button type="button" class="btn btn-default" data-toggle="dropdown"> <i class = "fa fa-ellipsis-v"></i> </button>
                                       <ul class="dropdown-menu">
-                                          <!-- <li>
-                                              <a href="">
-                                                  <?php echo get_phrase('view_profile');?>
-                                              </a>
-                                          </li> -->
                                           <li>
                                               <a href="<?php echo site_url('panel-admin/user_form/edit_user_form/'.$user['id']) ?>">
                                                   <?php echo get_phrase('edit');?>
@@ -56,6 +52,7 @@
                                           </li>
                                       </ul>
                                   </div>
+                                <?php endif;?>
                               </td>
                             </tr>
                         <?php endforeach; ?>

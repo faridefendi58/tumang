@@ -36,6 +36,7 @@ class Email_model extends CI_Model {
 			$email_to	=	$email;
 			//$this->do_email($email_msg , $email_sub , $email_to);
 			$this->send_php_mail($email_msg , $email_sub , $email_to);
+			//$this->send_smtp_mail($email_msg , $email_sub , $email_to);
 			return true;
 		}
 		else
@@ -123,4 +124,44 @@ class Email_model extends CI_Model {
 		   echo "The email has failed!";
 	   }
    }
+
+    public function send_smtp_mail($msg=NULL, $sub=NULL, $to=NULL, $from=NULL, $attachment_url=NULL) {
+        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+        try {
+            $mail->SMTPDebug = 0;
+            $mail->do_debug = 0;
+            $has_smtp = has_setting('use_smtp');
+            if ($has_smtp) {
+                $use_smtp = get_settings('use_smtp');
+                if ($use_smtp > 0) {
+                    $mail->isSMTP();
+                    $mail->Host = get_settings('smtp_host');
+                    $mail->SMTPAuth = true;
+                    $mail->Username = get_settings('smtp_user');
+                    $mail->Password = get_settings('smtp_secret');
+                    $mail->SMTPSecure = get_settings('smtp_secure');
+                    $mail->Port = get_settings('smtp_port');
+                } else {
+                    $mail->isMail();
+                }
+            } else {
+                $mail->isMail();
+            }
+
+            //Recipients
+            $mail->setFrom( get_settings('system_email'), 'Admin '. get_settings('system_name') );
+            $exp = explode("@", $to);
+            $mail->addAddress( $to, ucfirst($exp[0]) );
+            $mail->addReplyTo( $to, ucfirst($exp[0]) );
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = $sub;
+            if ( $attachment_url != NULL) {
+                $msg .=	"\r\nAttachment URL: ".$attachment_url;
+            }
+            $mail->Body = $msg;
+            $mail->send();
+        } catch (Exception $e) {echo $e->getMessage();}
+    }
 }

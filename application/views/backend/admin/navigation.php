@@ -69,7 +69,7 @@
             <ul class="sub-menu">
                 <li class = "<?php echo is_active('themes'); ?>" > <a href="<?php echo site_url('panel-admin/themes'); ?>"><?php echo get_phrase('themes'); ?></a> </li>
                 <li class = "<?php echo is_active('menus'); ?>" > <a href="<?php echo site_url('panel-admin/menus'); ?>"><?php echo get_phrase('menus'); ?></a> </li>
-                <li class = "<?php echo is_active('editor'); ?>" > <a href="<?php echo site_url('panel-admin/theme-editor'); ?>"><?php echo get_phrase('editor'); ?></a> </li>
+                <?php /*<li class = "<?php echo is_active('editor'); ?>" > <a href="<?php echo site_url('panel-admin/theme-editor'); ?>"><?php echo get_phrase('editor'); ?></a> </li>*/?>
                 <li class = "<?php echo is_multi_level_active(['section_chart', 'section_settings'], 1); ?>" >
                     <a href="javascript:;">
                         <span><?php echo get_phrase('Section Page'); ?></span>

@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
 
-                                <div class="panel panel-default">
+                                <div class="panel panel-default hidden">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
 
-                                <div class="panel panel-default">
+                                <div class="panel panel-default hidden">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
@@ -142,41 +142,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <?/*<div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                                                <?php echo get_phrase('payment_info'); ?> <span style="color: red; font-size: 12px;">(<?php echo get_phrase('required_for_instructors'); ?>)</span>
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseFive" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <div class="col-md-8 col-sm-8 col-xs-8">
-                                                <div class="form-group">
-                                                    <label class="form-label"><?php echo get_phrase('paypal_client_id'); ?></label>
-                                                    <div class="controls">
-                                                        <input type="text" name = "paypal_client_id" class="form-control" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label"><?php echo get_phrase('stripe_public_key'); ?></label>
-                                                    <div class="controls">
-                                                        <input type="text" name = "stripe_public_key" class="form-control" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label"><?php echo get_phrase('stripe_secret_key'); ?></label>
-                                                    <div class="controls">
-                                                        <input type="text" name = "stripe_secret_key" class="form-control" value="">
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>*/?>
                             </div>
                     </div>
                     <div class="col-md-4">

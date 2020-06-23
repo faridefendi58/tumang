@@ -53,28 +53,28 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label"><?php echo get_phrase('facebook_link');?></label>
 									<div class="col-sm-5">
-										<input type="text" class="form-control" name="facebook_link" value="<?php echo $social_links['facebook'];?>" required/>
+										<input type="text" class="form-control" name="facebook_link" value="<?php echo $social_links['facebook'];?>"/>
 									</div>
 								</div>
 
 								<div class="form-group">
 									<label class="col-sm-3 control-label"><?php echo get_phrase('twitter_link');?></label>
 									<div class="col-sm-5">
-										<input type="text" class="form-control" name="twitter_link" value="<?php echo $social_links['twitter'];?>" required/>
+										<input type="text" class="form-control" name="twitter_link" value="<?php echo $social_links['twitter'];?>"/>
 									</div>
 								</div>
 
 								<div class="form-group">
 									<label class="col-sm-3 control-label"><?php echo get_phrase('linkedin_link');?></label>
 									<div class="col-sm-5">
-										<input type="text" class="form-control" name="linkedin_link" value="<?php echo $social_links['linkedin'];?>" required/>
+										<input type="text" class="form-control" name="linkedin_link" value="<?php echo $social_links['linkedin'];?>"/>
 									</div>
 								</div>
 
 								<div class="form-group">
 									<label class="col-sm-3 control-label"><?php echo get_phrase('a_short_title_about_yourself'); ?></label>
 									<div class="col-sm-5">
-										<textarea rows="5" class="form-control" name="title" placeholder="<?php echo get_phrase('a_short_title_about_yourself'); ?>" required><?php echo $row['title']; ?></textarea>
+										<textarea rows="5" class="form-control" name="title" placeholder="<?php echo get_phrase('a_short_title_about_yourself'); ?>"><?php echo $row['title']; ?></textarea>
 									</div>
 								</div>
 
@@ -83,7 +83,7 @@
 									<div class="col-sm-5">
 										<textarea rows="5" class="form-control html5editor" data-stylesheet-url="<?php echo base_url('assets/backend/css/wysihtml5-color.css');?>"
 											name="biography" placeholder="<?php echo get_phrase('biography'); ?>"
-											id="sample_wysiwyg1" required><?php echo $row['biography']; ?></textarea>
+											id="sample_wysiwyg1"><?php echo $row['biography']; ?></textarea>
 										</div>
 									</div>
 
