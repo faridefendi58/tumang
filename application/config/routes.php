@@ -50,10 +50,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'page';
-$route['404_override'] = '';
+$route['404_override'] = '404';
 $route['translate_uri_dashes'] = TRUE;
 
-$route['(:any)'] = function ($params) {
+require_once( BASEPATH .'database/DB.php' );
+$db =& DB();
+
+//page
+/*$json_page_file = APPPATH.'/data/pages.json';
+$pages = [];
+if (file_exists($json_page_file)) {
+    $json_content = file_get_contents($json_page_file);
+    $pages = json_decode($json_content, true);
+}*/
+$db->select('slug');
+$query = $db->get( 'pages' );
+$pages = $query->result();
+foreach( $pages as $page ) {
+    $route[ $page->slug ] = 'page/view/'. $page->slug;
+}
+
+//blog category
+$db->select('slug');
+$query = $db->get( 'post_category' );
+$result = $query->result();
+foreach( $result as $row ) {
+    $route[ $row->slug ] = 'blog/category/'. $row->slug;
+}
+
+//blog
+$db->select('slug');
+$query = $db->get( 'posts' );
+$result = $query->result();
+foreach( $result as $blog ) {
+    $route[ $blog->slug ] = 'blog/view/'. $blog->slug;
+    $route[ 'blog/'.$blog->slug ] = 'blog/view/'. $blog->slug;
+}
+
+/*$route['(:any)'] = function ($params) {
     $json_page_file = APPPATH.'/data/pages.json';
     $pages = [];
     if (file_exists($json_page_file)) {
@@ -75,4 +109,4 @@ $route['(:any)'] = function ($params) {
 $route['blog/(:any)'] = function ($params)
 {
     return 'blog/view/'. $params;
-};
+};*/

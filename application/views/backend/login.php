@@ -41,7 +41,7 @@
                     <div class="col-lg-4 col-md-6 login-fancy-bg bg-overlay-black-40" style="background: url('<?php echo base_url('assets/backend/login/login_bg.jpg'); ?>');">
                         <div class="login-fancy pos-r d-flex">
                             <div class="text-center w-100 align-self-center">
-                                <img src="<?php echo base_url('assets/frontend/img/logo.png'); ?>" height="40" />
+                                <img src="<?php echo base_url('assets/frontend/pearo/img/logo.png'); ?>" height="40" />
                                 <h2 class="text-white mb-20"><?php echo get_settings('system_name');?></h2>
                                 <h4 class="text-white mb-20"><?php echo get_settings('slogan'); ?></h4>
                             </div>
@@ -74,7 +74,7 @@
 
                         <div class="login-fancy pb-40 clearfix" id = "forgot_password_area" style="display: none;">
                             <h3 class="mb-30"><?php echo get_phrase('forgot_password'); ?></h3>
-                            <form class="" action="<?php echo site_url('login/forgot_password/backend'); ?>" method="post">
+                            <form class="" action="<?php echo site_url('panel-admin/forgot_password/backend'); ?>" method="post">
                                 <div class="section-field mb-20">
                                     <label class="mb-10" for="name"><?php echo get_phrase('email'); ?>* </label>
                                     <input id="forgot_password_email" class="web form-control" type="email" placeholder="<?php echo get_phrase('email'); ?>" name="email" required>

@@ -73,7 +73,7 @@
                             <textarea name="SlideShow[caption]" class="form-control"></textarea>
                         </div>
 
-                        <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6" id="img-upload">
                             <label class="form-label"><?php echo get_phrase('image');?></label>
 
                             <div class="controls">
@@ -89,9 +89,42 @@
                                         <input type="file" name="image" accept="image/*">
                                     </span>
                                         <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput"><?php echo get_phrase('remove'); ?></a>
+                                        <a href="javascript:void(0);" class="btn btn-default" onclick="return reqUpload(1);">Upload Format Video</a>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6 hidden" id="vid-upload">
+                            <label class="form-label"><?php echo get_phrase('video');?> (.mp4)</label>
+                            <div class="controls">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
+                                    <div>
+                                    <span class="btn btn-white btn-file">
+                                        <span class="fileinput-new"><?php echo get_phrase('select_video'); ?></span>
+                                        <span class="fileinput-exists"><?php echo get_phrase('change'); ?></span>
+                                        <input type="file" name="video" accept="video/mp4">
+                                    </span>
+                                        <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput"><?php echo get_phrase('remove'); ?></a>
+                                        <a href="javascript:void(0);" class="btn btn-default" onclick="return reqUpload(2);">Upload Format Image</a>
+                                        <a href="javascript:void(0);" class="btn btn-default hidden" onclick="return reqUpload(3);">Upload video URL</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6 hidden" id="vid-url">
+                            <label class="text-bold"><?php echo get_phrase('video url'); ?></label>
+                            <input type="text" name="SlideShow[video_url]" id="ip-vid-url" class="form-control" placeholder="ex: https://www.youtube.com/watch?v=H3jLkJrhHKQ"/>
+                            <a href="javascript:void(0);" class="btn btn-default" onclick="return reqUpload(1);">Upload Format Video</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                            <label class="text-bold"><?php echo get_phrase('font_color'); ?></label>
+                            <input type="text" name="SlideShow[configs][font_color]" class="form-control" placeholder="contoh: #fff atau white"/>
                         </div>
                     </div>
 
@@ -106,3 +139,21 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function reqUpload(type) {
+        if (type == 1) {
+            $('#img-upload').addClass("hidden");
+            $('#vid-upload').removeClass("hidden");
+            //$('#vid-url').addClass("hidden");
+        } else if (type == 2){
+            $('#vid-upload').addClass("hidden");
+            $('#img-upload').removeClass("hidden");
+            //$('#vid-url').addClass("hidden");
+        } else {
+            $('#vid-upload').addClass("hidden");
+            $('#img-upload').addClass("hidden");
+            //$('#vid-url').removeClass("hidden");
+        }
+        return false;
+    }
+</script>

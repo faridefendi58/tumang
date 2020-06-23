@@ -92,4 +92,43 @@ class Chart_model extends CI_Model {
 
         return $items;
     }
+    
+    public function get_items_limit($limit){
+        $items = [];
+        $limit = (int)$limit;
+        /*$this->db->select('section_chart.date, section_chart.open, section_chart.close, section_chart.low, section_chart.high');
+        $this->db->order_by('section_chart.date', 'asc');
+        $this->db->limit($limit);*/
+        $sql = "SELECT date, open, close, low, high FROM (
+                    SELECT * FROM tbl_section_chart ORDER BY date DESC LIMIT ?
+                    ) sub
+                ORDER BY date ASC";
+        $models = $this->db->query($sql, [$limit]);
+        if ($models->num_rows() > 0) {
+            foreach ($models->result_array() as $data){
+                $arr = [];
+                $arr[] = date("d-m-Y", strtotime($data['date']));
+                $arr[] = floatval($data['low']);
+                $arr[] = floatval($data['open']);
+                $arr[] = floatval($data['close']);
+                $arr[] = floatval($data['high']);
+                $arr[] = 'Open : '.$data['open'].'
+                            Close : '.$data['close'].'
+                            Low : '.$data['low'].'
+                            High : '.$data['high']
+                    ;
+                $items[] = $arr;
+            }
+        }
+        return json_encode($items);
+    }
+    
+    public function get_last_item(){
+        $this->db->select('section_chart.*');
+        $this->db->order_by('section_chart.date', 'desc');
+        $this->db->limit(1);
+        $result = $this->db->get('section_chart')->row();
+        $result->percent = number_format(abs((($result->close - $result->open) / $result->open) * 100), 2,',','.');
+        return $result;
+    }
 }

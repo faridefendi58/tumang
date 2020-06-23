@@ -79,14 +79,16 @@
                             <textarea name="SlideShow[caption]" class="form-control"><?php echo $data->caption;?></textarea>
                         </div>
 
-                        <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6 <?php if (!empty($data->video)):?>hidden<?php endif;?>" id="img-upload">
                             <label class="form-label"><?php echo get_phrase('image');?></label>
 
                             <div class="controls">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <?php if (!empty($data->image)):?>
                                     <div class="fileinput-new thumbnail" style="width: 100px; height: 100px;" data-trigger="fileinput">
                                         <img src="<?php echo base_url($data->image);?>" alt="...">
                                     </div>
+                                    <?php endif;?>
                                     <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
                                     <div>
                                     <span class="btn btn-white btn-file">
@@ -95,9 +97,53 @@
                                         <input type="file" name="image" accept="image/*">
                                     </span>
                                         <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput"><?php echo get_phrase('remove'); ?></a>
+                                        <a href="javascript:void(0);" class="btn btn-default" onclick="return reqUpload(1);">Upload Format Video</a>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6 <?php if (empty($data->video) || strpos($data->video, 'http') !== false):?>hidden<?php endif;?>" id="vid-upload">
+                            <label class="form-label"><?php echo get_phrase('video');?> (.mp4)</label>
+                            <div class="controls">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <?php if (!empty($data->video) && strpos($data->video, 'http') === false):?>
+                                        <div class="fileinput-new thumbnail" data-trigger="fileinput">
+                                            <video id="video" width="200px" muted autoplay>
+                                                <source src="<?php echo site_url($data->video);?>" type="video/mp4">
+                                            </video>
+                                        </div>
+                                        <a href="javascript:void();" class="btn" onclick="removeVideo(this);"
+                                           attr-id="<?php echo $data->id;?>" attr-href="<?php echo site_url('panel-admin/slide-show/delete-video/'. $data->id); ?>"
+                                           title="Remove this video"> <i class="fa fa-trash fa-2x"></i> </a>
+                                    <?php endif;?>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
+                                    <div>
+                                    <span class="btn btn-white btn-file">
+                                        <span class="fileinput-new"><?php echo get_phrase('select_video'); ?></span>
+                                        <span class="fileinput-exists"><?php echo get_phrase('change'); ?></span>
+                                        <input type="file" name="video" accept="video/mp4">
+                                    </span>
+                                        <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput"><?php echo get_phrase('remove'); ?></a>
+                                        <a href="javascript:void(0);" class="btn btn-default" onclick="return reqUpload(2);">Upload Format Image</a>
+                                        <a href="javascript:void(0);" class="btn btn-default hidden" onclick="return reqUpload(3);">Upload video URL</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6 <?php if (empty($data->video) || strpos($data->video, 'http') === false):?>hidden<?php endif;?>" id="vid-url">
+                            <label class="text-bold"><?php echo get_phrase('video url'); ?></label>
+                            <input type="text" name="SlideShow[video_url]" id="ip-vid-url" class="form-control" placeholder="ex: https://www.youtube.com/watch?v=H3jLkJrhHKQ" <?php if (strpos($data->video, 'http') !== false):?>value="<?php echo $data->video;?>"<?php endif;?>/>
+                            <a href="javascript:void(0);" class="btn btn-default" onclick="return reqUpload(1);">Upload Format Video</a>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-md-6 col-lg-6">
+                            <label class="text-bold"><?php echo get_phrase('font_color'); ?></label>
+                            <input type="text" name="SlideShow[configs][font_color]" class="form-control" placeholder="contoh: #fff atau white" value="<?php echo (array_key_exists('font_color', $configs))? $configs['font_color'] : '';?>"/>
                         </div>
                     </div>
 
@@ -113,5 +159,43 @@
     </div>
 </div>
 <script type="text/javascript">
-
+function removeVideo(dt) {
+    if (confirm('Are you sure you want to delete this video?')) {
+        var $this =  $(dt);
+        var url = $this.attr('attr-href');
+        $.ajax({
+            'url': url,
+            'type':'post',
+            'data':{'id':$this.attr('attr-id')},
+            'dataType': 'json',
+            'success': function(data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function () {
+                        window.location.href = "<?php echo site_url('panel-admin/slide-show/update'); ?>/"+ $this.attr('attr-id');
+                    }, 3000);
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+    }
+    return false;
+}
+function reqUpload(type) {
+    if (type == 1) {
+        $('#img-upload').addClass("hidden");
+        $('#vid-upload').removeClass("hidden");
+        //$('#vid-url').addClass("hidden");
+    } else if (type == 2){
+        $('#vid-upload').addClass("hidden");
+        $('#img-upload').removeClass("hidden");
+        //$('#vid-url').addClass("hidden");
+    } else {
+        $('#vid-upload').addClass("hidden");
+        $('#img-upload').addClass("hidden");
+        //$('#vid-url').removeClass("hidden");
+    }
+    return false;
+}
 </script>

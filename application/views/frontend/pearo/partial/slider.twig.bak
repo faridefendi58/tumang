@@ -1,0 +1,28 @@
+<div class="home-area home-slides-two owl-carousel owl-theme">
+    {% set slides = this.slideShow_model.get_items({'category_id':1,'order_by':'order'}) %}
+    {% for s, slide in slides %}
+    <div class="banner-section"
+         {% if slide.image %}style="background-image: url('{{ slide.image | link }}');background-position: center top !important;"{% else %}class="item-bg3"{% endif %}>
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="container">
+                    <div class="main-banner-content">
+                        {% set configs = slide.configs | json_decode %}
+                        {% if configs.subtitle %}
+                        <span class="sub-title">{{ configs.subtitle }}</span>
+                        {% endif %}
+                        <h1>{{ slide.title }}</h1>
+                        <p>{{ slide.caption }}</p>
+
+                        <div class="btn-box">
+                            {% if configs.button_label %}
+                            <a href="{{ slide.url | link }}" class="optional-btn">{{ configs.button_label }} <span></span></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

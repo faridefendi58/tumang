@@ -51,6 +51,10 @@ class Crud_model extends CI_Model {
         $data['value'] = html_escape($this->input->post('fax'));
         $this->db->where('key', 'fax');
         $this->db->update('settings', $data);
+        
+        $data['value'] = html_escape($this->input->post('whatsapp'));
+        $this->db->where('key', 'whatsapp');
+        $this->db->update('settings', $data);
 
         $data['value'] = html_escape($this->input->post('youtube_api_key'));
         $this->db->where('key', 'youtube_api_key');
@@ -78,6 +82,27 @@ class Crud_model extends CI_Model {
 
         $data['value'] = html_escape($this->input->post('website_description'));
         $this->db->where('key', 'website_description');
+        $this->db->update('settings', $data);
+
+        //sosmed
+        $data['value'] = html_escape($this->input->post('facebook'));
+        $this->db->where('key', 'facebook');
+        $this->db->update('settings', $data);
+        
+        $data['value'] = html_escape($this->input->post('twitter'));
+        $this->db->where('key', 'twitter');
+        $this->db->update('settings', $data);
+        
+        $data['value'] = html_escape($this->input->post('instagram'));
+        $this->db->where('key', 'instagram');
+        $this->db->update('settings', $data);
+        
+        $data['value'] = html_escape($this->input->post('linkedin'));
+        $this->db->where('key', 'linkedin');
+        $this->db->update('settings', $data);
+        
+        $data['value'] = html_escape($this->input->post('youtube'));
+        $this->db->where('key', 'youtube');
         $this->db->update('settings', $data);
     }
 
@@ -291,4 +316,22 @@ class Crud_model extends CI_Model {
         fwrite($file_handle, json_encode($data));
         fclose($file_handle);
     }
+    
+    public function save_section($datas){
+        //$data['section_config'] = $datas;
+        $data['value'] = json_encode($datas);
+        $this->db->where('key', 'section_config');
+        $this->db->update('settings', $data);
+    }
+    
+    public function get_section_config(){
+        $c = get_settings('section_config');
+        $configs = json_decode($c, true);
+        usort($configs, function ($item1, $item2) {
+            return $item1['order'] <=> $item2['order'];
+        });
+        return $configs;
+    }
+    
+    
 }

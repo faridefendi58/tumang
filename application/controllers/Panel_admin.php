@@ -1250,14 +1250,48 @@ class Panel_admin extends CI_Controller {
                     }
                 }
 
+                $uploadvideo = null; $video_url = $_POST['SlideShow']['video_url'];
+                if (!empty($_FILES['video']['name'])) {
+                    $path_info = pathinfo($_FILES['video']['name']);
+                    if (array_key_exists('extension', $path_info)) {
+                        if (!in_array($path_info['extension'], ['mp4'])) {
+                            array_push($errors, 'Tipe dokumen yang diperbolehkan hanya mp4');
+                        }
+
+                        $uploadvideo = 'uploads/slides/' . time() . '.' . $path_info['extension'];
+                        if (!move_uploaded_file($_FILES['video']['tmp_name'], $uploadvideo)) {
+                            array_push($errors, 'Gagal mengupload video');
+                        } else {
+                            if (!empty($uploadfile)) {
+                                unlink($uploadfile);
+                            }
+                        }
+                        $video_url = null;
+                        $_POST['SlideShow']['video_url'] = null;
+                    }
+                }
+
                 if (count($errors) <= 0) {
                     $_post_data = $this->input->post('SlideShow');
                     if (!empty($uploadfile)) {
                         $_post_data['image'] = $uploadfile;
                     }
 
+                    if (!empty($uploadvideo)) {
+                        $_post_data['video'] = $uploadvideo;
+                        $_post_data['image'] = '';
+                    } else {
+                        if (empty($uploadfile) && !empty($video_url)) {
+                            $_post_data['video'] = $video_url;
+                        }
+                    }
+
                     if (is_array($_post_data['configs'])) {
                         $_post_data['configs'] = json_encode($_post_data['configs']);
+                    }
+
+                    if (array_key_exists('video_url', $_post_data)) {
+                        unset($_post_data['video_url']);
                     }
 
                     $id = $this->slideShow_model->create($_post_data);
@@ -1280,7 +1314,7 @@ class Panel_admin extends CI_Controller {
             $errors = [];
             if (isset($_POST['SlideShow'])) {
                 $uploadfile = $mdl->image;
-                if (isset($_FILES['image']['name'])) {
+                if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
                     $path_info = pathinfo($_FILES['image']['name']);
                     if (array_key_exists('extension', $path_info)) {
                         if (!in_array($path_info['extension'], ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp'])) {
@@ -1294,18 +1328,58 @@ class Panel_admin extends CI_Controller {
                     }
                 }
 
+                $uploadvideo = $mdl->video;
+                if (!empty($_FILES['video']['name'])) {
+                    $path_info = pathinfo($_FILES['video']['name']);
+                    if (array_key_exists('extension', $path_info)) {
+                        if (!in_array($path_info['extension'], ['mp4'])) {
+                            array_push($errors, 'Tipe dokumen yang diperbolehkan hanya mp4');
+                        }
+
+                        $uploadvideo = 'uploads/slides/' . time() . '.' . $path_info['extension'];
+                        if (!move_uploaded_file($_FILES['video']['tmp_name'], $uploadvideo)) {
+                            array_push($errors, 'Gagal mengupload video');
+                        } else {
+                            if (!empty($mdl->video) && (strpos($mdl->video, 'http') === false) && file_exists($mdl->video)) {
+                                unlink($mdl->video);
+                            }
+                        }
+                        $_POST['SlideShow']['video_url'] = null;
+                    }
+                }
+
                 if (count($errors) <= 0) {
                     $_post_data = $this->input->post('SlideShow');
                     $_post_data['id'] = $param2;
                     if (!empty($uploadfile)) {
                         $_post_data['image'] = $uploadfile;
                     }
+                    if (!empty($uploadvideo)) {
+                        $_post_data['video'] = $uploadvideo;
+                        $_post_data['image'] = '';
+                    }
+                    $remove_old_video = null;
+                    if (!empty($_POST['SlideShow']['video_url'])) {
+                        $_post_data['video'] = $_POST['SlideShow']['video_url'];
+                        if (!empty($mdl->video)) {
+                            $remove_old_video = $mdl->video;
+                        }
+                    }
                     if (is_array($_post_data['configs'])) {
                         $_post_data['configs'] = json_encode($_post_data['configs']);
                     }
 
+                    if (array_key_exists('video_url', $_post_data)) {
+                        unset($_post_data['video_url']);
+                    }
                     $update = $this->slideShow_model->update($_post_data);
                     if ($update) {
+                        if (!empty($uploadvideo) && file_exists($mdl->image)) {
+                            unlink($mdl->image);
+                        }
+                        if ($remove_old_video && (strpos($mdl->video, 'http') === false) && file_exists($mdl->video)) {
+                            unlink($mdl->video);
+                        }
                         $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_saved'));
                         redirect(site_url('panel-admin/slide-show/update/' . $param2), 'refresh');
                     }
@@ -1324,10 +1398,32 @@ class Panel_admin extends CI_Controller {
                 $result = ['success' => 0];
                 $model = $this->slideShow_model->findByPk($_POST['id']);
                 $image = $model->image;
+                $video = $model->video;
                 $delete = $this->slideShow_model->delete($_POST['id']);
                 if ($delete) {
                     if (file_exists($image)) {
                         unlink($image);
+                    }
+                    if (file_exists($video)) {
+                        unlink($video);
+                    }
+                    $result['success'] = 1;
+                    $result['message'] = get_phrase('successfully_deleted');
+                } else {
+                    $result['message'] = get_phrase('failed_execution');
+                }
+                echo json_encode($result); exit;
+            }
+        } elseif ($param1 == "delete-video") {
+            if (isset($_POST['id']) && $_POST['id'] == $param2) {
+                $result = ['success' => 0];
+                $model = $this->slideShow_model->findByPk($_POST['id']);
+                $video = $model->video;
+                $vars = ['id' => $_POST['id'], 'video' => ''];
+                $update = $this->slideShow_model->update($vars);
+                if ($update) {
+                    if (file_exists($video)) {
+                        unlink($video);
                     }
                     $result['success'] = 1;
                     $result['message'] = get_phrase('successfully_deleted');
@@ -1340,6 +1436,132 @@ class Panel_admin extends CI_Controller {
             $page_data['page_name'] = 'slide_show';
             $page_data['page_title'] = get_phrase('slide_show');
             $page_data['items'] = $this->slideShow_model->get_items();
+            $this->load->view('backend/index', $page_data);
+        }
+    }
+    
+    public function section_settings($param1 = "", $param2 = "") {
+        if ($this->session->userdata('admin_login') != true) {
+            $this->need_login();
+        }
+
+        $this->session->set_userdata('last_page', 'section_settings');
+
+        if ($param1 == 'detail') {
+            
+        } else {
+            if (isset($_POST['section'])) {
+                $this->crud_model->save_section($_POST['section']);
+            }
+            $page_data['page_name'] = 'section_settings';
+            $page_data['page_title'] = get_phrase('section_settings');
+            $page_data['categories'] = get_post_categories();
+            $page_data['config'] = json_decode($this->db->get_where('settings', array('key' => 'section_config'))->row()->value);
+            $this->load->view('backend/index', $page_data);
+        }
+    }
+    
+    public function section_promo($param1 = "", $param2 = ""){
+        if ($this->session->userdata('admin_login') != true) {
+            $this->need_login();
+        }
+
+        $this->session->set_userdata('last_page', 'section_promo');
+        
+        if ($param1 == 'update') {
+            $page_data['page_name'] = 'section_promo_update';
+            $mdl = $this->promo_model->get_item(['id' => $param2]);
+            $page_data['data'] = $mdl;
+            $page_data['page_title'] = get_phrase('promo');
+
+            $errors = [];
+            if (isset($_POST['Promo'])) {
+                $uploadfile = $mdl->image;
+                if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
+                    $path_info = pathinfo($_FILES['image']['name']);
+                    if (array_key_exists('extension', $path_info)) {
+                        if (!in_array($path_info['extension'], ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp'])) {
+                            array_push($errors, 'Tipe dokumen yang diperbolehkan hanya jpg, jpeg, webp, dan png');
+                        }
+
+                        $uploadfile = 'uploads/promo/' . time() . '.' . $path_info['extension'];
+                        if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+                            array_push($errors, 'Gagal mengupload dokumen');
+                        }
+                    }
+                }
+
+                if (count($errors) <= 0) {
+                    $_post_data = $this->input->post('Promo');
+                    $_post_data['id'] = $param2;
+                    if (!empty($uploadfile)) {
+                        $_post_data['image'] = $uploadfile;
+                    }
+                    $update = $this->promo_model->update($_post_data);
+                    if ($update) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_saved'));
+                        redirect(site_url('panel-admin/section-promo/update/' . $param2), 'refresh');
+                    }
+                } else {
+                    $this->session->set_flashdata('error_message',get_phrase(implode(", ", $errors)));
+                }
+            }
+            $this->load->view('backend/index', $page_data);
+        } if (isset($_POST['id']) && $_POST['id'] == $param2) {
+                $result = ['success' => 0];
+                $model = $this->promo_model->findByPk($_POST['id']);
+                $image = $model->image;
+                $delete = $this->promo_model->delete($_POST['id']);
+                if ($delete) {
+                    if (file_exists($image)) {
+                        unlink($image);
+                    }
+                    $result['success'] = 1;
+                    $result['message'] = get_phrase('successfully_deleted');
+                } else {
+                    $result['message'] = get_phrase('failed_execution');
+                }
+                echo json_encode($result); exit;
+            
+        } elseif ($param1 == 'create'){
+            $page_data['page_name'] = 'section_promo_create';
+            $page_data['page_title'] = get_phrase('section_promo');
+
+            $errors = [];
+            if (isset($_POST['Promo'])) {
+                $uploadfile = null;
+                if (!empty($_FILES['image']['name'])) {
+                    $path_info = pathinfo($_FILES['image']['name']);
+                    if (!in_array($path_info['extension'], ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'webp'])) {
+                        array_push($errors, 'Tipe dokumen yang diperbolehkan hanya jpg, jpeg, webp, dan png');
+                    }
+
+                    $uploadfile = 'uploads/promo/' . time() . '.' . $path_info['extension'];
+                    if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+                        array_push($errors, 'Gagal mengupload dokumen');
+                    }
+                }
+
+                if (count($errors) <= 0) {
+                    $_post_data = $this->input->post('Promo');
+                    if (!empty($uploadfile)) {
+                        $_post_data['image'] = $uploadfile;
+                    }
+
+                    $id = $this->promo_model->create($_post_data);
+                    if ($id > 0) {
+                        $this->session->set_flashdata('flash_message', get_phrase('your_data_is_successfully_saved'));
+                        redirect(site_url('panel-admin/section-promo/update/' . $id), 'refresh');
+                    }
+                } else {
+                    $this->session->set_flashdata('error_message',get_phrase(implode(", ", $errors)));
+                }
+            }
+            $this->load->view('backend/index', $page_data);
+        } else {
+            $page_data['page_name'] = 'section_promo';
+            $page_data['page_title'] = get_phrase('section_promo');
+            $page_data['items'] = $this->promo_model->get_items();
             $this->load->view('backend/index', $page_data);
         }
     }

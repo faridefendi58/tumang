@@ -108,7 +108,9 @@ class Post_model extends CI_Model {
     public function get_by_category($cat_id, $limit = 20) {
         $this->db->select('posts.*, post_in_category.*');
         $this->db->join('posts', 'posts.id = post_in_category.post_id', 'left');
-        $this->db->where('post_in_category.category_id', $cat_id);
+        if ($cat_id != "0"){
+            $this->db->where('post_in_category.category_id', $cat_id);
+        }
         $this->db->order_by('posts.created_at', 'desc');
         $this->db->limit($limit);
 
@@ -169,5 +171,17 @@ class Post_model extends CI_Model {
             $_categories[$item['category_id']] = $item['slug'];
         }
         return $_categories;
+    }
+    
+    public function getAllByCategory($data = []){
+        print_r($data);
+        $this->db->select('posts.*, post_in_category.*');
+        $this->db->join('posts', 'posts.id = post_in_category.post_id', 'left');
+        if ($data['category'] != "0"){
+            $this->db->where('post_in_category.category_id', $data['category']);
+        }
+        $this->db->order_by('posts.created_at', 'desc');
+        $this->db->limit($data['num_post']);
+        return $this->db->get('post_in_category')->result_array();
     }
 }

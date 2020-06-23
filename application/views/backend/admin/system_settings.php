@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form class="" action="<?php echo site_url('panel-admin/system_settings/system_update'); ?>" method="post">
+                    <form class="system-settings" action="<?php echo site_url('panel-admin/system_settings/system_update'); ?>" method="post">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group">
                                 <label class="form-label"><?php echo get_phrase('website_name'); ?></label>
@@ -96,6 +96,16 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="form-label"><?php echo get_phrase('whatsApp'); ?></label>
+                                <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-info" type="button">+62</button>
+                                        </div>
+                                        <input type="text" name = "whatsapp" class="form-control" value="<?php echo get_settings('whatsapp'); ?>">
+                                    </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="form-label"><?php echo get_phrase('youtube_API_key'); ?> &nbsp; <a href = "https://developers.google.com/youtube/v3/getting-started" target = "_blank" style="color: #a7a4a4">(<?php echo get_phrase('get_YouTube_API_key'); ?>)</a></label>
                                 <div class="controls">
                                     <input type="text" name = "youtube_api_key" class="form-control" value="<?php echo get_settings('youtube_api_key'); ?>">
@@ -149,6 +159,55 @@
                                     <input type="text" name = "footer_link" class="form-control" value="<?php echo get_settings('footer_link'); ?>">
                                 </div>
                             </div>
+                            
+                            <fieldset>
+                                <legend>Social Media</legend>
+                                <div class="form-group">
+                                    <label class="form-label">Facebook</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-info" type="button" style="background-color:#0574E7;">https://www.facebook.com/</button>
+                                        </div>
+                                        <input type="text" name = "facebook" class="form-control" value="<?php echo get_settings('facebook'); ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Twitter</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-info" type="button" style="background-color:#2596DB;">https://twitter.com/</button>
+                                        </div>
+                                        <input type="text" name = "twitter" class="form-control" value="<?php echo get_settings('twitter'); ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Instagram</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-info" type="button" style="background-color:#5D54CB;">https://instagram.com/</button>
+                                        </div>
+                                        <input type="text" name = "instagram" class="form-control" value="<?php echo get_settings('instagram'); ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">LinkedIn</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-info" type="button" style="background-color:#0073B0;">https://www.linkedin.com/in/</button>
+                                        </div>
+                                        <input type="text" name = "linkedin" class="form-control" value="<?php echo get_settings('linkedin'); ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Youtube</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-info" type="button" style="background-color:#FF0000;">https://www.youtube.com/user/</button>
+                                        </div>
+                                        <input type="text" name = "youtube" class="form-control" value="<?php echo get_settings('youtube'); ?>">
+                                    </div>
+                                </div>
+                            </fieldset>
 
                             <div class="form-group">
                                 <button class = "btn btn-success" type="submit" name="button"><?php echo get_phrase('update_system_settings'); ?></button>
